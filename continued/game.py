@@ -7,6 +7,7 @@ from gameparser import *
 
 
 
+
 def list_of_items(items):
     """This function takes a list of items (see items.py for the definition) and
     returns a comma-separated list of item names (as a string). For example:
@@ -198,7 +199,17 @@ def print_menu(exits, room_items, inv_items):
     # COMPLETE ME!
     #
     
-    print("What do you want to do?")
+    print("What do you want to do? \n")
+
+    print("You can:")
+    for exit1 in exits:
+        print("Go " + exit1.upper() + " to " + rooms[exits[exit1]]["name"] + ".")
+    
+    for item in room_items:
+        print("TAKE " + item["id"].upper() + " to take " + item["name"] + ".")
+
+    for item in inv_items:
+        print("DROP " + item["id"].upper() + " to take " + item["name"] + ".")
 
 
 def is_valid_exit(exits, chosen_exit):
@@ -226,7 +237,8 @@ def execute_go(direction):
     (and prints the name of the room into which the player is
     moving). Otherwise, it prints "You cannot go there."
     """
-    print (current_room)
+    global current_room
+
     if is_valid_exit(current_room["exits"], direction):
         current_room = move(current_room["exits"],direction)
 
@@ -237,7 +249,14 @@ def execute_take(item_id):
     there is no such item in the room, this function prints
     "You cannot take that."
     """
-    pass
+    global current_room
+    global inventory
+    for item in current_room["items"]:
+        if(item["id"] == item_id):
+            inventory.append(item)
+            current_room["items"].remove(item)
+            return
+    print ("You cannot take that.")
     
 
 def execute_drop(item_id):
@@ -245,7 +264,14 @@ def execute_drop(item_id):
     player's inventory to list of items in the current room. However, if there is
     no such item in the inventory, this function prints "You cannot drop that."
     """
-    pass
+    global current_room
+    global inventory
+    for item in inventory:
+        if(item["id"] == item_id):
+            current_room["items"].append(item)
+            inventory.remove(item)
+            return
+    print ("You cannot drop that.")
     
 
 def execute_command(command):
@@ -318,9 +344,9 @@ def move(exits, direction):
     # Next room to go to
     return rooms[exits[direction]]
 
-
 # This is the entry point of our program
 def main():
+    global current_room
 
     # Main game loop
     while True:
@@ -341,4 +367,3 @@ def main():
 # See https://docs.python.org/3.4/library/__main__.html for explanation
 if __name__ == "__main__":
     main()
-

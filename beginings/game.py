@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 
-from map import rooms
-import string
 import re
+from map import rooms
 
 
 def remove_punct(text):
@@ -38,7 +37,7 @@ def remove_spaces(text):
     >>> remove_spaces("   ")
     ''
     """
-    
+
     return re.sub(r'(^\s*)|(\s*$)','',text)
 
 
